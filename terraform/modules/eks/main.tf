@@ -2,14 +2,14 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.57.1"
+      version = "~> 5.0"
     }
   }
 }
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 6.0"
+  version = "~> 5.0"
 
   name = "${var.environment}-api-service-vpc"
   cidr = var.vpc_cidr
