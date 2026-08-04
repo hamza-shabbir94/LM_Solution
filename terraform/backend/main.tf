@@ -1,17 +1,3 @@
-# ------------------------------------------------------------------
-# Bootstrap: creates the S3 bucket + DynamoDB lock table that every
-# environment's own backend.s3 block then points at.
-#
-# This config deliberately has NO remote backend of its own -- it
-# uses local state, and is run manually, once, before any environment
-# is applied for the first time. It cannot use the S3 backend it's
-# creating (chicken-and-egg), so this is the one exception to
-# "always use remote state" in this repo.
-#
-# Run once per AWS account:
-#   cd terraform/bootstrap && terraform init && terraform apply
-# ------------------------------------------------------------------
-
 terraform {
   required_providers {
     aws = {
