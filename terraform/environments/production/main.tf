@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "your-terraform-state-bucket"
+    bucket         = "lm-backend"
     key            = "api-service/production/terraform.tfstate"
     region         = "eu-central-1"
     encrypt        = true
@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 module "platform" {
-  source = "../../modules/eks-platform"
+  source = "../../modules/eks"
 
   environment      = "production"
   aws_region       = "eu-central-1"

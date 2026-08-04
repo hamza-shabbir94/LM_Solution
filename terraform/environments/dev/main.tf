@@ -1,8 +1,6 @@
 terraform {
-  required_version = ">= 1.11"
-
   backend "s3" {
-    bucket         = "your-terraform-state-bucket"
+    bucket         = "lm-backend"
     key            = "api-service/dev/terraform.tfstate"
     region         = "eu-central-1"
     encrypt        = true
