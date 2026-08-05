@@ -1,7 +1,7 @@
 additional_access_entries = {
   devops_user = {
     principal_arn = "arn:aws:iam::577435557149:user/devops-user"
-    policy_arn    = "arn:aws:iam::aws:policy/eks/cluster-access-policy/AmazonEKSClusterAdminPolicy"
+    policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
   }
 }
 
