@@ -1,0 +1,14 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: api-service
+spec:
+  # Guarantees at least 1 pod stays up during VOLUNTARY disruptions --
+  # node drains for cluster upgrades, cluster-autoscaler scaling down a
+  # node, etc. This does NOT protect against involuntary failures (a node
+  # crashing outright); that's what replicas + the Deployment controller
+  # are for.
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: api-service

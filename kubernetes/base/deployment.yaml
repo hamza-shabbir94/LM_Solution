@@ -5,24 +5,33 @@ metadata:
   labels:
     app: api-service
 spec:
+  # 2 replicas as a baseline for availability -- a single replica means
+  # any pod restart or node failure causes a full outage. The exact count
+  # is overridden per-environment (dev may run 1, prod may run more).
   replicas: 2
 
   selector:
     matchLabels:
       app: api-service
 
-  
+  # Rolling update strategy: replace pods gradually rather than all at
+  # once, so there's always at least one healthy pod serving traffic
+  # during a deploy.
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 0   
-      maxSurge: 1          
+      maxUnavailable: 0   # never drop below `replicas` healthy pods during a rollout
+      maxSurge: 1          # allow one extra pod above `replicas` while rolling
 
   template:
     metadata:
       labels:
         app: api-service
     spec:
+      # Ensures the pod cannot run as root even if the image forgot to set
+      # USER, and that Kubernetes itself enforces the numeric UID baked
+      # into the Dockerfile -- defense in depth, not just relying on the
+      # image build to get it right.
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -35,7 +44,7 @@ spec:
           imagePullPolicy: IfNotPresent
 
           ports:
-            - containerPort: 8080
+            - containerPort: 8000
               name: http
 
           # Container-level security hardening, independent of the pod-level
@@ -48,6 +57,9 @@ spec:
               drop:
                 - ALL
 
+          # Conservative baseline sizing for this lightweight app -- would
+          # size from observed load/metrics for a real production workload
+          # rather than guessing.
           resources:
             requests:
               memory: "64Mi"
@@ -55,33 +67,38 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "200m"
-
-          
           startupProbe:
             httpGet:
               path: /alive
-              port: 8080
+              port: 8000
             initialDelaySeconds: 2
             periodSeconds: 2
             failureThreshold: 10   # 2s initial + up to 10x2s = ~22s ceiling to start
 
-          
+          # livenessProbe: "is the process alive at all". Failure restarts
+          # the container. Kept simple since /alive has no dependency checks.
           livenessProbe:
             httpGet:
               path: /alive
-              port: 8080
+              port: 8000
             periodSeconds: 10
             failureThreshold: 3
             timeoutSeconds: 2
 
+          # readinessProbe: "should this pod receive traffic right now".
+          # Checked more frequently than liveness since traffic routing
+          # should react faster than a full restart decision.
           readinessProbe:
             httpGet:
               path: /ready
-              port: 8080
+              port: 8000
             periodSeconds: 5
             failureThreshold: 3
             timeoutSeconds: 2
 
+          # readOnlyRootFilesystem above means the app can't write anywhere
+          # by default -- if it needs a writable temp dir at runtime, mount
+          # an emptyDir explicitly rather than loosening the filesystem.
           volumeMounts:
             - name: tmp
               mountPath: /tmp

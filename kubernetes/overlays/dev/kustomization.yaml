@@ -1,0 +1,40 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+images:
+  - name: api-service
+    newName: hamza94/development-api-service
+    newTag: "dev-latest"
+
+patches:
+  - target:
+      kind: Deployment
+      name: api-service
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: api-service
+    patch: |-
+      - op: replace
+        path: /spec/minReplicas
+        value: 1
+      - op: replace
+        path: /spec/maxReplicas
+        value: 3
+
+  # Dev doesn't need a PDB forcing 1 pod to always stay up -- a brief
+  # gap during a node drain is an acceptable trade-off here.
+  - target:
+      kind: PodDisruptionBudget
+      name: api-service
+    patch: |-
+      - op: replace
+        path: /spec/minAvailable
+        value: 0

@@ -1,0 +1,45 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Pull in every resource from base unchanged, then apply only the
+# patches below on top -- no YAML is duplicated or rewritten.
+resources:
+  - ../../base
+
+# Pin the exact image tag for this environment. In dev this might track
+# a `latest`/branch tag; in production it's pinned to an immutable,
+# already-scanned semver tag (same "build once, promote the same
+# artifact" principle discussed for the CI pipeline).
+images:
+  - name: api-service
+    newName: hamza94/production-api-service
+    newTag: "1.0.0"
+
+# Small, targeted overrides on top of the base Deployment -- everything
+# else (probes, security context, container port, etc.) is inherited
+# from base as-is.
+patches:
+  - target:
+      kind: Deployment
+      name: api-service
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 4
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: "100m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: "500m"
+
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: api-service
+    patch: |-
+      - op: replace
+        path: /spec/minReplicas
+        value: 4
+      - op: replace
+        path: /spec/maxReplicas
+        value: 20
