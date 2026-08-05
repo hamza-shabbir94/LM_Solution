@@ -1,6 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# Pull in every resource from base unchanged, then apply only the
+# patches below on top -- no YAML is duplicated or rewritten.s
 resources:
   - deployment.yaml
   - service.yaml

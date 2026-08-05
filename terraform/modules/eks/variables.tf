@@ -47,7 +47,7 @@ variable "cluster_endpoint_public_access_cidrs" {
 }
 
 variable "additional_access_entries" {
-  description = "Extra IAM principals (beyond whoever runs terraform apply) that need Kubernetes RBAC access to this cluster -- e.g. engineers who browse the console under their own IAM user. Left empty by default so this module stays portable across AWS accounts; supply real values via a local, environment-specific .tfvars file that is NOT committed, rather than hardcoding an account-specific ARN here."
+  description = "Extra IAM principals needing Kubernetes RBAC access -- supplied via a local, gitignored terraform.tfvars, never committed. See terraform.tfvars.example."
   type = map(object({
     principal_arn = string
     policy_arn    = string

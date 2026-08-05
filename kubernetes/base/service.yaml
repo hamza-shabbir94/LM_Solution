@@ -1,3 +1,7 @@
+# This file is part of the Kubernetes base configuration for the api-service deployment.
+# It defines a Service resource that exposes the api-service deployment to external traffic.
+# The Service is configured as a LoadBalancer type, which allows it to receive traffic from outside the Kubernetes cluster. 
+# It selects pods with the label "app: api-service" and forwards traffic to the target port 8000 on those pods, while exposing port 80 for external access.
 apiVersion: v1
 kind: Service
 metadata:

@@ -3,11 +3,8 @@ kind: PodDisruptionBudget
 metadata:
   name: api-service
 spec:
-  # Guarantees at least 1 pod stays up during VOLUNTARY disruptions --
-  # node drains for cluster upgrades, cluster-autoscaler scaling down a
-  # node, etc. This does NOT protect against involuntary failures (a node
-  # crashing outright); that's what replicas + the Deployment controller
-  # are for.
+  # The PDB is configured to require at least 1 pod to be available at all times, which helps maintain service availability during voluntary disruptions 
+  # (e.g., node maintenance or scaling events). This ensures that the api-service can continue to serve requests even when some pods are temporarily unavailable.
   minAvailable: 1
   selector:
     matchLabels:

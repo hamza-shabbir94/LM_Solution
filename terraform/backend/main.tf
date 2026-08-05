@@ -1,3 +1,5 @@
+# This Terraform configuration file sets up an S3 bucket to be used as a backend for storing Terraform state files.
+# It includes the necessary provider configuration for AWS, and defines resources for the S3 bucket, versioning, server-side encryption, and public access block settings.
 terraform {
   required_providers {
     aws = {
@@ -11,6 +13,9 @@ provider "aws" {
   region = "eu-central-1"
 }
 
+# ------------------------------------------------------------------
+# S3 bucket for Terraform state storage
+# ------------------------------------------------------------------
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "lm-backend" # must be globally unique -- change before applying
 
@@ -20,7 +25,9 @@ resource "aws_s3_bucket" "terraform_state" {
     prevent_destroy = true
   }
 }
-
+# ------------------------------------------------------------------
+# S3 bucket versioning to allow rollback of state files
+# ------------------------------------------------------------------
 resource "aws_s3_bucket_versioning" "terraform_state" {
   bucket = aws_s3_bucket.terraform_state.id
   versioning_configuration {
@@ -28,6 +35,9 @@ resource "aws_s3_bucket_versioning" "terraform_state" {
   }
 }
 
+# ------------------------------------------------------------------
+# Server-side encryption and public access block settings for the S3 bucket
+# ------------------------------------------------------------------
 resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" {
   bucket = aws_s3_bucket.terraform_state.id
   rule {
@@ -37,6 +47,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" 
   }
 }
 
+# ------------------------------------------------------------------
+# Block public access to the S3 bucket to ensure state files are not exposed publicly
+# ------------------------------------------------------------------
 resource "aws_s3_bucket_public_access_block" "terraform_state" {
   bucket                  = aws_s3_bucket.terraform_state.id
   block_public_acls       = true

@@ -1,14 +1,20 @@
+# This file is part of the Kubernetes overlays for the staging environment.
+# It defines a Kustomization resource that pulls in the base configuration and applies staging-specific patches
+# to the Deployment and HorizontalPodAutoscaler resources. The staging overlay uses a different Docker image
+# and tag, and adjusts the number of replicas for the api-service deployment.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
   - ../../base
 
+# The staging overlay uses a different Docker image and tag, and adjusts the number of replicas for the api-service deployment.
 images:
   - name: api-service
     newName: hamza94/staging-api-service
     newTag: "staging-latest"
 
+# Patches are applied to the Deployment and HorizontalPodAutoscaler resources to customize their behavior for the staging environment.
 patches:
   - target:
       kind: Deployment
@@ -18,6 +24,7 @@ patches:
         path: /spec/replicas
         value: 2
 
+# Patches are applied to the HorizontalPodAutoscaler resource to adjust the minimum and maximum number of replicas for the api-service deployment in the staging environment.
   - target:
       kind: HorizontalPodAutoscaler
       name: api-service

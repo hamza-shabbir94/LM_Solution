@@ -1,23 +1,21 @@
+# This file is part of the Kubernetes production overlay configuration for the api-service deployment.
+# It defines a Kustomization resource that pulls in the base configuration and applies production-specific patches
+# to the Deployment and HorizontalPodAutoscaler resources. The production overlay uses a different Docker image
+# and tag, increases the number of replicas, and adjusts the CPU resource requests and limits for
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# Pull in every resource from base unchanged, then apply only the
-# patches below on top -- no YAML is duplicated or rewritten.
+# resources from base are pulled in unchanged, then production-specific patches are applied on top.
 resources:
   - ../../base
 
-# Pin the exact image tag for this environment. In dev this might track
-# a `latest`/branch tag; in production it's pinned to an immutable,
-# already-scanned semver tag (same "build once, promote the same
-# artifact" principle discussed for the CI pipeline).
+# The production overlay uses a different Docker image and tag, increases the number of replicas, and adjusts the CPU resource requests and limits for the api-service deployment.
 images:
   - name: api-service
     newName: hamza94/production-api-service
     newTag: "1.0.0"
 
-# Small, targeted overrides on top of the base Deployment -- everything
-# else (probes, security context, container port, etc.) is inherited
-# from base as-is.
+# Patches are applied to the Deployment and HorizontalPodAutoscaler resources to customize their behavior for the production environment.
 patches:
   - target:
       kind: Deployment
@@ -33,6 +31,7 @@ patches:
         path: /spec/template/spec/containers/0/resources/limits/cpu
         value: "500m"
 
+# Patches are applied to the HorizontalPodAutoscaler resource to adjust the minimum and maximum number of replicas for the api-service deployment in the production environment.
   - target:
       kind: HorizontalPodAutoscaler
       name: api-service

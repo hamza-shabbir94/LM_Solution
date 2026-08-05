@@ -1,3 +1,7 @@
+# This file is part of the Kubernetes base configuration for the api-service deployment.
+# It defines a HorizontalPodAutoscaler (HPA) resource that automatically scales the number of replicas of the api-service deployment based on CPU utilization.
+# The HPA is configured to maintain a target CPU utilization of 70%, with a minimum of 2 replicas and a maximum of 10 replicas. This allows the deployment to scale up 
+# or down based on the actual load, ensuring that the application can handle varying levels of traffic while maintaining performance and availability.
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -15,7 +19,4 @@ spec:
         name: cpu
         target:
           type: Utilization
-          # Scale out once average CPU across pods crosses 70% of the
-          # requested 50m -- leaves headroom to absorb a traffic spike
-          # while new pods are still starting up.
           averageUtilization: 70

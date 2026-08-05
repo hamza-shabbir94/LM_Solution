@@ -3,12 +3,13 @@ kind: Kustomization
 
 resources:
   - ../../base
-
+# The development overlay uses a different Docker image and tag, and adjusts the number of replicas for the api-service deployment.
 images:
   - name: api-service
     newName: hamza94/development-api-service
     newTag: "dev-latest"
 
+# Patches are applied to the Deployment and HorizontalPodAutoscaler resources to customize their behavior for the development environment.
 patches:
   - target:
       kind: Deployment
@@ -17,7 +18,7 @@ patches:
       - op: replace
         path: /spec/replicas
         value: 1
-
+# Patches are applied to the HorizontalPodAutoscaler resource to adjust the minimum and maximum number of replicas for the api-service deployment in the development environment.
   - target:
       kind: HorizontalPodAutoscaler
       name: api-service
@@ -28,9 +29,7 @@ patches:
       - op: replace
         path: /spec/maxReplicas
         value: 3
-
-  # Dev doesn't need a PDB forcing 1 pod to always stay up -- a brief
-  # gap during a node drain is an acceptable trade-off here.
+# Patches are applied to the PodDisruptionBudget resource to adjust the minimum number of available pods for the api-service deployment in the development environment.
   - target:
       kind: PodDisruptionBudget
       name: api-service
