@@ -39,14 +39,6 @@ variable "node_desired_size" {
   default = 2
 }
 
-variable "additional_access_entries" {
-  description = "Extra IAM principals (beyond whoever runs terraform apply) that need Kubernetes RBAC access to this cluster -- e.g. engineers who browse the console under their own IAM user. Left empty by default so this module stays portable across AWS accounts; supply real values via a local, environment-specific .tfvars file that is NOT committed, rather than hardcoding an account-specific ARN here."
-  type = map(object({
-    principal_arn = string
-    policy_arn    = string
-  }))
-  default = {}
-}
 
 variable "cluster_endpoint_public_access_cidrs" {
   description = "CIDR blocks allowed to reach the EKS API server's public endpoint. Defaults to open (matches the module's own default) so this stays usable out of the box; restrict to known IPs (office, VPN, CI runner) via a local .tfvars for real use, rather than leaving it open long-term."
