@@ -45,32 +45,25 @@ detailing what was left incomplete and any challenges you encountered.
 ### Part 1: Kubernetes manifests
 
 * Prepare Kubernetes manifests necessary to run the API service in a Kubernetes cluster (version >= 1.30).
-
-* Please make sure that the components necessary for exposing the API service outside the Kubernetes cluster 
-are included in the manifests.
-
+* Please make sure that the components necessary for exposing the API service outside the Kubernetes cluster
+  are included in the manifests.
 * Note that the manifests should be reusable, so that the API service can be deployed in multiple
-environments (e.g. development, staging, production).
+  environments (e.g. development, staging, production).
 
 ### Part 2: Terraform configuration
 
 * Prepare Terraform configuration necessary to provision an EKS cluster in AWS, with all necessary components,
-so we can deploy the API service with the Kubernetes manifests from part #1 of your submission in it.
-
+  so we can deploy the API service with the Kubernetes manifests from part #1 of your submission in it.
 * Please make sure that the cloud resources necessary for exposing the API service outside the Kubernetes cluster
-are included in the configuration.
-
+  are included in the configuration.
 * Note that the configuration should be reusable, so that the cloud resources for the API service
-can be provisioned in multiple environments (e.g. development, staging, production).
+  can be provisioned in multiple environments (e.g. development, staging, production).
 
 ### Part 3: Wrap-up & documentation
 
 * Add a file called `SOLUTION.md` and describe the solution you have implemented in parts #1 and #2.
-
 * Include the reasoning behind the decisions you made, and any trade-offs you had to make.
-
 * Include any assumptions you made during the implementation.
-
 * Include any improvements you would make if you had more time, necessary for such a solution to be production ready.
 
 ## Code quality

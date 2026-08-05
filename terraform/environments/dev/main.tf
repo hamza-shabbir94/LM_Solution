@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 module "platform" {
-  source = "../../modules/eks-platform"
+  source = "../../modules/eks"
 
   environment = "dev"
   aws_region  = "eu-central-1"
@@ -23,6 +23,8 @@ module "platform" {
   node_min_size       = 1
   node_max_size       = 3
   node_desired_size   = 1
+  additional_access_entries = var.additional_access_entries
+  cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
 }
 
 output "cluster_name" {

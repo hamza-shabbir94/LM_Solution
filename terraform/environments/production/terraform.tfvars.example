@@ -1,0 +1,15 @@
+# Copy this file to terraform.tfvars (which is gitignored) and fill in
+# real values for local testing. Never commit terraform.tfvars itself --
+# it's account- and person-specific, not portable to anyone else's AWS
+# account.
+
+additional_access_entries = {
+  devops_user = {
+    principal_arn = "arn:aws:iam::<your-account-id>:user/<your-iam-user>"
+    policy_arn    = "arn:aws:iam::aws:policy/eks/cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  }
+}
+
+# Restrict which IPs can reach the EKS API server's public endpoint.
+# Defaults to open (0.0.0.0/0) if not set -- override for real use.
+cluster_endpoint_public_access_cidrs = ["<your-ip-here>/32"]
