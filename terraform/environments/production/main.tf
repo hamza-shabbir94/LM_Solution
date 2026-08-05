@@ -19,7 +19,7 @@ module "platform" {
   aws_region       = "eu-central-1"
   vpc_cidr         = "10.2.0.0/16"
 
-  node_instance_types = ["t3.large"]
+  node_instance_types = ["m7i-flex.large"]
   node_min_size       = 3
   node_max_size       = 10
   node_desired_size   = 3
