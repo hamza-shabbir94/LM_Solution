@@ -20,9 +20,9 @@ module "platform" {
   vpc_cidr         = "10.2.0.0/16"
 
   node_instance_types = ["m7i-flex.large"]
-  node_min_size       = 3
+  node_min_size       = 2
   node_max_size       = 10
-  node_desired_size   = 2
+  node_desired_size   = 3
   additional_access_entries = var.additional_access_entries
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
 }
