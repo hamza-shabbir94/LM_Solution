@@ -23,12 +23,12 @@ module "platform" {
   node_min_size       = 2
   node_max_size       = 5
   node_desired_size   = 2
+  additional_access_entries = var.additional_access_entries
+  cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
 }
 
 output "cluster_name" {
   value = module.platform.cluster_name
 }
 
-output "ecr_repository_url" {
-  value = module.platform.ecr_repository_url
-}
+

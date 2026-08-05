@@ -3,3 +3,10 @@
 
 # OS X
 .DS_Store
+
+# terraform.tfvars
+*.tfvars
+!*.tfvars.example
+
+# terraform.tfstate
+*.tfstate

@@ -22,3 +22,7 @@
 - Adding terraform backend
 - Adding terraform eks Module and environment file
 - Adding kubernetes manifest files
+
+### 📚 Documentation
+
+- Adding proper comment into the files, and making corrections

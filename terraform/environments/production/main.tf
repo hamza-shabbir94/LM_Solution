@@ -31,7 +31,5 @@ output "cluster_name" {
   value = module.platform.cluster_name
 }
 
-output "ecr_repository_url" {
-  value = module.platform.ecr_repository_url
-}
+
 

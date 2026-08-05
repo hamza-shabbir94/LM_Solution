@@ -19,8 +19,7 @@ provider "aws" {
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "lm-backend" # must be globally unique -- change before applying
 
-  # Prevents `terraform destroy` from ever accidentally deleting the
-  # bucket every environment's state lives in.
+  # Prevents `terraform destroy` from ever accidentally deleting the bucket every environment's state lives in.
   lifecycle {
     prevent_destroy = true
   }
